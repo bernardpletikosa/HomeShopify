@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Match">
+
+    <ListView
+        android:id="@+id/frag_prod_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/frag_prod_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/default_small_padding"
+            android:text="@string/tutorial_products_title"
+            android:textColor="@color/purple_dark"
+            android:textSize="@dimen/tutorial_title_size" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/default_small_padding"
+            android:text="@string/tutorial_products_text"
+            android:textColor="@color/purple_light"
+            android:textSize="@dimen/tutorial_text_size" />
+
+    </LinearLayout>
+
+</RelativeLayout>

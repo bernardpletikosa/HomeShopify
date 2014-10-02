@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "bp.jellena.shopify"
+        minSdkVersion 11
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlign true
+        }
+        android.applicationVariants.all{ variant ->
+            variant.mergeAssets.doFirst {
+                File fonts = file("${projectDir}/build/intermediates/exploded-aar/com.github.johnkil.android-robototextview/robototextview/2.1.0/assets/fonts")
+                if (fonts.exists()) {
+                    for (File file : fonts.listFiles()) {
+                        if (file.getName().contains("RobotoSlab") || file.getName().contains("RobotoCondensed")) {
+                            println("delete " + file.getName() + " font")
+                            file.delete()
+                        };
+                    }
+                }
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:20.+'
+    compile 'com.android.support:support-v4:20.+'
+
+    compile 'com.jakewharton:butterknife:5.1.2'
+    compile 'com.jakewharton.timber:timber:2.4.+'
+
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.1.0'
+
+    compile 'de.greenrobot:eventbus:2.2.1'
+
+    compile files('libs/activeandroid-3.0.jar')
+
+}

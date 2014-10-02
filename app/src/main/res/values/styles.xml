@@ -1,0 +1,66 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.Navigationdrawersi">
+        <!--<item name="android:alertDialogStyle">@style/SettingsDialog</item>-->
+    </style>
+
+    <style name="Match">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MatchWidth" parent="Match">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ScrollView" parent="Match">
+        <item name="android:fillViewport">true</item>
+    </style>
+
+    <style name="LinearLayout" parent="Match">
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="RobotoTextView" parent="Wrap">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="RobotoTextView.Number">
+        <item name="android:textSize">@dimen/text_size_fragment_number</item>
+    </style>
+
+    <style name="RobotoTextView.Fragment">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+    </style>
+
+    <style name="base">
+        <item name="android:padding">10dp</item>
+    </style>
+    <style name="title" parent="@style/base">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="body" parent="@style/base">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <!--<style name="SettingsDialog">-->
+        <!--<item name="android:fullDark">@drawable/dialog_body</item>-->
+        <!--<item name="android:topDark">@drawable/dialog_title</item>-->
+        <!--<item name="android:centerDark">@drawable/dialog_body</item>-->
+        <!--<item name="android:bottomDark">@drawable/dialog_footer</item>-->
+        <!--<item name="android:fullBright">@drawable/dialog_body</item>-->
+        <!--<item name="android:centerBright">@drawable/dialog_body</item>-->
+        <!--<item name="android:bottomBright">@drawable/dialog_footer</item>-->
+        <!--<item name="android:bottomMedium">@drawable/dialog_footer</item>-->
+        <!--<item name="android:centerMedium">@drawable/dialog_body</item>-->
+    <!--</style>-->
+</resources>
