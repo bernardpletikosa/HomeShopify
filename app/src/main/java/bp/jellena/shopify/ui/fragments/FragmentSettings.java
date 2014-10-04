@@ -3,7 +3,6 @@ package bp.jellena.shopify.ui.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,11 +23,11 @@ import butterknife.OnClick;
 /**
  * Created by bp 02/10/14.
  */
-public class FragmentAbout extends Fragment {
+public class FragmentSettings extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.inject(this, view);
         return view;
     }
@@ -42,7 +40,7 @@ public class FragmentAbout extends Fragment {
 
     @OnClick(R.id.frag_sett_export_db)
     public void exportDB() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.SettingsDialog);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("Data backup").setIcon(R.drawable.ic_launcher).setCancelable(false);
         alertDialog.setMessage("You will replace previously backup data. Do you want to continue?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -73,13 +71,31 @@ public class FragmentAbout extends Fragment {
 
     @OnClick(R.id.frag_sett_import_db)
     public void importDatabase() {
-        try {
-            FileChannel source = new FileInputStream(DBHelper.getBackupDBFile()).getChannel();
-            FileChannel destination = new FileOutputStream(DBHelper.getCurrentDBFile()).getChannel();
-            DBHelper.transferDBData(source, destination);
-        } catch (IOException e) {
-            Log.e(DBHelper.class.getSimpleName(), "IOException while importing DB data.");
-            e.printStackTrace();
-        }
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Data backup").setIcon(R.drawable.ic_launcher).setCancelable(false);
+        alertDialog.setMessage("You will overwrite all your current data. Do you want to continue?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    FileChannel source = new FileInputStream(DBHelper.getBackupDBFile()).getChannel();
+                    FileChannel destination = new FileOutputStream(DBHelper.getCurrentDBFile()).getChannel();
+                    if (DBHelper.transferDBData(source, destination))
+                        Toast.makeText(getActivity(), "Data import successful.", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getActivity(), "Data import failed... Please try again.", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Log.e(DBHelper.class.getSimpleName(), "IOException while importing DB data.");
+                    e.printStackTrace();
+                }
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

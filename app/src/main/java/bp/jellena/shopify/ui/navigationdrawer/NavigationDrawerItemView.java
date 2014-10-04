@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -57,11 +58,11 @@ public class NavigationDrawerItemView extends RelativeLayout {
         requestLayout();
         if (item.isMainItem()) {
             itemTitleTV.setText(item.getItemName());
-            itemTitleTV.setTextSize(22);
+            itemTitleTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.app_drawer_main_item_text_size));
             itemIconIV.setVisibility(View.GONE);
         } else {
             itemTitleTV.setText(item.getItemName());
-            itemTitleTV.setTextSize(14);
+            itemTitleTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.app_drawer_item_text_size));
             itemIconIV.setImageDrawable(getIcon(item.getItemIcon()));
             itemIconIV.setVisibility(View.VISIBLE);
             rr.setBackgroundColor(res.getColor(R.color.grey_background));

@@ -2,7 +2,7 @@ package bp.jellena.shopify.data;
 
 import android.support.v4.app.Fragment;
 
-import bp.jellena.shopify.ui.fragments.FragmentAbout;
+import bp.jellena.shopify.ui.fragments.FragmentSettings;
 import bp.jellena.shopify.ui.fragments.FragmentHome;
 import bp.jellena.shopify.ui.fragments.FragmentProducts;
 import bp.jellena.shopify.ui.fragments.FragmentShop;
@@ -12,7 +12,7 @@ import bp.jellena.shopify.ui.fragments.FragmentShop;
  */
 public enum Fragments {
 
-    HOME(FragmentHome.class), SHOP(FragmentShop.class), PRODUCTS(FragmentProducts.class), ABOUT(FragmentAbout.class);
+    HOME(FragmentHome.class), SHOP(FragmentShop.class), PRODUCTS(FragmentProducts.class), SETTINGS(FragmentSettings.class);
 
     final Class<? extends Fragment> fragment;
 

@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:left="@dimen/item_circle_half_size">
-        <shape android:shape="rectangle">
-            <size
-                android:width="@dimen/item_circle_half_size"
-                android:height="@dimen/item_circle_size" />
-            <solid android:color="@color/purple_dark" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
 
-            <corners
-                android:bottomLeftRadius="0dp"
-                android:bottomRightRadius="@dimen/item_circle_half_size"
-                android:topLeftRadius="0dp"
-                android:topRightRadius="@dimen/item_circle_half_size" />
-        </shape>
-    </item>
-    <item android:right="@dimen/item_circle_half_size">
-        <shape android:shape="rectangle">
-            <size
-                android:width="@dimen/item_circle_half_size"
-                android:height="@dimen/item_circle_size" />
-            <solid android:color="@color/gray_shadow" />
+    <solid android:color="@color/purple_dark" />
+    <stroke
+        android:width="@dimen/frag_prod_item_between_circle_stroke"
+        android:color="@color/grey_background" />
 
-            <corners
-                android:bottomLeftRadius="@dimen/item_circle_half_size"
-                android:bottomRightRadius="0dp"
-                android:topLeftRadius="@dimen/item_circle_half_size"
-                android:topRightRadius="0dp" />
-        </shape>
-    </item>
-</layer-list>
+</shape>

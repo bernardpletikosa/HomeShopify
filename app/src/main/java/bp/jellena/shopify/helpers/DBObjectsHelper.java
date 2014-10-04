@@ -18,15 +18,20 @@ import de.greenrobot.event.EventBus;
 public class DBObjectsHelper {
 
     public static void createProduct(Context context, Product editingProduct, String name, long categoryId) {
-        Product product = null;
+        Product product;
 
-        if (editingProduct != null)
+        if (editingProduct != null) {
             product = new Select().from(Product.class).where("Id = ?", editingProduct.getId()).executeSingle();
-
-        if (product == null)
-            product = new Product();
-        else
-            Toast.makeText(context, "Updated " + product.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Updated product " + product.name, Toast.LENGTH_SHORT).show();
+        } else {
+            product = new Select().from(Product.class).where("categoryId = ? AND name = ?", categoryId, name).executeSingle();
+            if (product == null) {
+                product = new Product();
+            } else {
+                Toast.makeText(context, "Product " + product.name + " already exist.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
         product.name = name;
         product.categoryId = categoryId;
@@ -37,15 +42,20 @@ public class DBObjectsHelper {
     }
 
     public static void createCategory(Context context, Category editingCategory, String name, int color) {
-        Category category = null;
+        Category category;
 
-        if (editingCategory != null)
+        if (editingCategory != null) {
             category = new Select().from(Category.class).where("Id = ?", editingCategory.getId()).executeSingle();
-
-        if (category == null)
-            category = new Category();
-        else
-            Toast.makeText(context, "Updated " + category.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Updated category " + category.name, Toast.LENGTH_SHORT).show();
+        } else {
+            category = new Select().from(Category.class).where("name = ?", name).executeSingle();
+            if (category == null) {
+                category = new Category();
+            } else {
+                Toast.makeText(context, "Category " + category.name + " already exist.", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
 
         category.name = name;
         category.color = color;

@@ -9,7 +9,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
@@ -36,11 +34,10 @@ import bp.jellena.shopify.data.Fragments;
 import bp.jellena.shopify.data.ShopifyConstants;
 import bp.jellena.shopify.data.db.Category;
 import bp.jellena.shopify.data.db.Product;
-import bp.jellena.shopify.data.db.ProductState;
 import bp.jellena.shopify.data.model.NavigationDrawerItem;
 import bp.jellena.shopify.events.ShopifyEvents;
 import bp.jellena.shopify.helpers.DBObjectsHelper;
-import bp.jellena.shopify.ui.fragments.FragmentAbout;
+import bp.jellena.shopify.ui.fragments.FragmentSettings;
 import bp.jellena.shopify.ui.fragments.FragmentHome;
 import bp.jellena.shopify.ui.fragments.FragmentProducts;
 import bp.jellena.shopify.ui.fragments.FragmentShop;
@@ -50,7 +47,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 /**
  * Created by Michal Bialas on 19/07/14.
@@ -126,8 +122,8 @@ public class MainActivity extends ActionBarActivity {
         navigationItems = new ArrayList<>();
         navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_home), true));
         navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_shop), true));
-        navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_about),
-                R.drawable.ic_action_about, false));
+        navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_settings),
+                R.drawable.ic_navigation_drawer, false));
 
         mNavigationDrawerListViewWrapper.replaceWith(navigationItems);
 
@@ -177,8 +173,6 @@ public class MainActivity extends ActionBarActivity {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-
-        initHome();
     }
 
     private void initHome() {
@@ -225,6 +219,8 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop)
             getMenuInflater().inflate(R.menu.shop_menu, menu);
+        else if (getSupportFragmentManager().getFragments().get(0) instanceof FragmentSettings)
+            getMenuInflater().inflate(R.menu.settings_menu, menu);
         else
             getMenuInflater().inflate(R.menu.main, menu);
 
@@ -380,19 +376,22 @@ public class MainActivity extends ActionBarActivity {
                 }
                 break;
             case 2:
-                if (!(getSupportFragmentManager().getFragments().get(0) instanceof FragmentAbout)) {
+                if (!(getSupportFragmentManager().getFragments().get(0) instanceof FragmentSettings)) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.contentFrame, Fragment
-                                    .instantiate(MainActivity.this, Fragments.ABOUT.getFragment()))
+                                    .instantiate(MainActivity.this, Fragments.SETTINGS.getFragment()))
                             .commit();
                 }
                 break;
         }
+
+        reinitiateAddLayout();
     }
 
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getFragments().get(0) instanceof FragmentProducts ||
+                getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop ||
                 getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop) {
 
             reinitiateAddLayout();
@@ -411,7 +410,8 @@ public class MainActivity extends ActionBarActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(newItemNameET.getWindowToken(), 0);
 
-        initiateNewItemLayout(mMenu.getItem(1));
+        if (mMenu != null && mMenu.size() > 1)
+            initiateNewItemLayout(mMenu.getItem(1));
     }
 
     private void showHomeTutorial() {

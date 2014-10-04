@@ -3,9 +3,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <size
-        android:width="@dimen/item_circle_size"
-        android:height="@dimen/item_circle_size" />
-
     <solid android:color="@color/purple_dark" />
+    <stroke
+        android:width="@dimen/frag_prod_item_full_circle_stroke"
+        android:color="@color/grey_background" />
 </shape>

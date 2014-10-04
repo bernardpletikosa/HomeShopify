@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_small_padding"
         android:animateLayoutChanges="true"
-        android:columnWidth="@dimen/category_grid_column_width"
+        android:columnWidth="@dimen/frag_home_category_grid_column_width"
         android:gravity="center"
         android:horizontalSpacing="@dimen/default_small_padding"
         android:numColumns="auto_fit"

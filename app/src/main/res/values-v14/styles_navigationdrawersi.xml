@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -20,18 +19,26 @@
 <resources>
 
     <style name="Theme.Navigationdrawersi" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_navigationdrawersi</item>
+        <item name="android:actionBarItemBackground">
+            @drawable/selectable_background_navigationdrawersi
+        </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Navigationdrawersi</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Navigationdrawersi</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Navigationdrawersi</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Navigationdrawersi</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Navigationdrawersi</item>
-        <item name="android:actionModeBackground">@drawable/cab_background_top_navigationdrawersi</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_navigationdrawersi</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Navigationdrawersi</item>
-        
-                <!-- Light.DarkActionBar specific -->
+        <item name="android:actionModeBackground">@drawable/cab_background_top_navigationdrawersi
+        </item>
+        <item name="android:actionModeSplitBackground">
+            @drawable/cab_background_bottom_navigationdrawersi
+        </item>
+        <item name="android:actionModeCloseButtonStyle">
+            @style/ActionButton.CloseMode.Navigationdrawersi
+        </item>
+
+        <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Navigationdrawersi.Widget</item>
+        <!--<item name="android:alertDialogTheme">@style/YourAlertDialogTheme</item>-->
 
     </style>
 
@@ -46,11 +53,20 @@
         <item name="android:background">@drawable/ab_transparent_navigationdrawersi</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Navigationdrawersi</item>
     </style>
-    
+
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Navigationdrawersi.Widget" parent="@style/Theme.AppCompat">
         <item name="android:popupMenuStyle">@style/PopupMenu.Navigationdrawersi</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Navigationdrawersi</item>
     </style>
 
+    <!--<style name="YourAlertDialogTheme" parent="@android:style/Theme.Dialog">-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <!--<item name="android:windowIsFloating">true</item>-->
+        <!--<item name="android:titleTextStyle">@color/purple_dark</item>-->
+        <!--<item name="android:divider">@color/purple_dark</item>-->
+        <!--<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>-->
+        <!--<item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>-->
+        <!--<item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>-->
+    <!--</style>-->
 </resources>
