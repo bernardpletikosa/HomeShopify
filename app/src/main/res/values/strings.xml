@@ -16,8 +16,6 @@
 
     <string name="content_description">image view</string>
 
-    <string name="about_text">This application is an example of a Navigation Drawer implementation using a new/bind pattern and the ButterKnife library.</string>
-    <string name="about_text2">It was written only for development purposes.</string>
     <string name="action_add">Add</string>
 
     <string name="tutorial_home_title">Welcome to Shopify!</string>
@@ -27,9 +25,10 @@
     <string name="tutorial_shop_text">Here will be all your items ordered by shopping priority.</string>
 
     <string name="tutorial_products_title">Products</string>
-    <string name="tutorial_products_text">Here should be your shopping items. Add some with the + on the top of the app.</string>
+    <string name="tutorial_products_text">Here should be your shopping items. Add some with the + button on the bottom.</string>
     <string name="menu_action_refresh">Refresh</string>
     <string name="settings_backup">Backup</string>
     <string name="frag_sett_import_button_text">Import</string>
     <string name="frag_sett_export_button_text">Export</string>
+    <string name="frag_prod_add_item_text">Add item</string>
 </resources>

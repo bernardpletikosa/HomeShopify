@@ -4,7 +4,9 @@ import bp.jellena.shopify.data.db.Category;
 import bp.jellena.shopify.data.db.Product;
 
 /**
- * Created by bp on 01/10/14.
+ * Created on 01/10/14
+ *
+ * @author bp
  */
 public class ShopifyEvents {
 
@@ -39,47 +41,6 @@ public class ShopifyEvents {
 
         public Category getCurrentCatategory() {
             return category;
-        }
-    }
-
-    public static class EditProductEvent {
-        private Product product;
-
-        public EditProductEvent(Product product) {
-            this.product = product;
-        }
-
-        public Product getProduct() {
-            return product;
-        }
-    }
-
-    public static class TutorialHome {
-        private final boolean start;
-
-        public TutorialHome(boolean start) {
-            this.start = start;
-        }
-
-        public boolean isStart() {
-            return start;
-        }
-    }
-
-    public static class TutorialProducts {
-        private final boolean start;
-
-        public TutorialProducts(boolean start) {
-            this.start = start;
-        }
-
-        public boolean isStart() {
-            return start;
-        }
-    }
-
-    public static class TutorialShop {
-        public TutorialShop() {
         }
     }
 

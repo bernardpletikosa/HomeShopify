@@ -17,11 +17,14 @@ import bp.jellena.shopify.data.model.NavigationDrawerItem;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 /**
- * Created by Michal Bialas on 19/07/14.
+ * Created by Michal Bialas on 19/07/14
+ *
+ * @author Michal Bialas
  */
 public class NavigationDrawerItemView extends RelativeLayout {
 
-    @InjectView(R.id.itemRR) RelativeLayout rr;
+    @InjectView(R.id.itemRR)
+    RelativeLayout rr;
 
     @InjectView(R.id.navigationDrawerItemTitleTV)
     TextView itemTitleTV;
@@ -30,7 +33,6 @@ public class NavigationDrawerItemView extends RelativeLayout {
     ImageView itemIconIV;
 
     final Resources res;
-
 
     public NavigationDrawerItemView(Context context) {
         super(context);

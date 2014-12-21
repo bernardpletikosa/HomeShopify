@@ -10,13 +10,10 @@ import com.activeandroid.annotation.Table;
 @Table(name = "Categories")
 public class Category extends Model {
 
-    @Column(name = "Name")
-    public String name;
+    @Column(name = "Name") public String name;
+    @Column(name = "Color") public int color;
 
-    @Column(name = "Color")
-    public int color;
-
-    public Category(){
+    public Category() {
         super();
     }
 }

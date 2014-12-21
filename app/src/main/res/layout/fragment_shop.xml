@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragmentOne"
+    android:id="@+id/fragmentShop"
     style="@style/Match"
     android:animateLayoutChanges="true">
 
-    <ListView
-        android:id="@+id/frag_prod_list_view"
+    <GridView
+        android:id="@+id/frag_shop_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:columnWidth="@dimen/frag_shop_grid_column_width"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:drawSelectorOnTop="false"
+        android:listSelector="@drawable/invisible_list_selector"/>
 
     <LinearLayout
         android:id="@+id/frag_shop_tutorial"

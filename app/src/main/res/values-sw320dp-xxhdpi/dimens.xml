@@ -39,6 +39,10 @@
     <dimen name="frag_prod_item_between_circle_stroke">12dp</dimen>
     <dimen name="frag_prod_item_full_circle_stroke">2dp</dimen>
     <dimen name="frag_prod_item_name_text_size">24sp</dimen>
+    <dimen name="frag_prod_add_item_btn_height">80dp</dimen>
+
+    <!--Products fragment-->
+    <dimen name="frag_shop_grid_column_width">200dp</dimen>
 
     <!--Tutorial-->
     <dimen name="tutorial_text_size">36sp</dimen>

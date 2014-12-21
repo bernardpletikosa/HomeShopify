@@ -14,7 +14,9 @@ import bp.jellena.shopify.data.model.NavigationDrawerItem;
 import bp.jellena.shopify.ui.misc.BindableAdapter;
 
 /**
- * Created by Michal Bialas on 19/07/14.
+ * Created by Michal Bialas on 19/07/14
+ *
+ * @author Michal Bialas
  */
 public class NavigationDrawerAdapter extends BindableAdapter<NavigationDrawerItem> {
 

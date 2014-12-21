@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Match">
+    style="@style/Match"
+    android:focusableInTouchMode="true">
 
-    <ListView
+    <GridView
         android:id="@+id/frag_prod_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/app_new_item_layout_height"
+        android:layout_marginTop="0dp"
+        android:columnWidth="@dimen/frag_shop_grid_column_width"
+        android:drawSelectorOnTop="false"
+        android:gravity="center"
+        android:listSelector="@drawable/invisible_list_selector"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth" />
+
+    <bp.jellena.shopify.ui.views.ProductAddView
+        android:id="@+id/frag_prod_add_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/frag_prod_add_prod_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/frag_prod_add_item_btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_selector"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_action_new"
+            android:drawablePadding="16dp"
+            android:gravity="center"
+            android:text="@string/frag_prod_add_item_text"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:textColor="@color/white" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/frag_prod_tutorial"
@@ -36,7 +75,6 @@
             android:text="@string/tutorial_products_text"
             android:textColor="@color/purple_light"
             android:textSize="@dimen/tutorial_text_size" />
-
     </LinearLayout>
 
 </RelativeLayout>

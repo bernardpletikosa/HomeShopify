@@ -3,7 +3,7 @@
     style="@style/Match"
     android:background="@color/grey_background">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
@@ -13,6 +13,7 @@
             android:id="@+id/new_item_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -68,12 +69,26 @@
             </HorizontalScrollView>
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/contentFrame"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_item_layout"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/contentFrame"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <FrameLayout
+                android:id="@+id/detailsFrame"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearDrawer"
@@ -126,7 +141,9 @@
         <include
             android:id="@+id/navigationDrawerListViewWrapper"
             layout="@layout/navigation_drawer_list_view" />
+
     </LinearLayout>
+
 
 </android.support.v4.widget.DrawerLayout>
 

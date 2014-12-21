@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/circleLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/frag_home_category_grid_column_width"
+    android:layout_height="@dimen/frag_home_category_grid_column_width"
+    android:layout_gravity="center"
+    android:background="@drawable/background_circle"
+    android:gravity="center"
+    android:padding="0dp"
+    android:layout_margin="0dp">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:id="@+id/circleLayout"
-        style="@style/Wrap"
-        android:layout_centerInParent="true"
+    <TextView
+        android:id="@+id/category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/background_circle"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/category_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:textSize="@dimen/frag_home_category_name_text_size" />
-    </LinearLayout>
-</RelativeLayout>
+        android:gravity="center"
+        android:textColor="@color/background_circle_selector"
+        android:textSize="@dimen/frag_home_category_name_text_size"/>
+</LinearLayout>

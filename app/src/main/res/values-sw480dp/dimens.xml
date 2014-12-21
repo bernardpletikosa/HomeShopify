@@ -7,7 +7,6 @@
     <!-- Navigation Drawer -->
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="navigation_drawer_image_view_size">32dp</dimen>
-
     <dimen name="navigation_drawer_personal_data_layout_height">80dp</dimen>
 
     <!-- Circle size -->
@@ -43,5 +42,7 @@
     <!--Tutorial-->
     <dimen name="tutorial_text_size">36sp</dimen>
     <dimen name="tutorial_title_size">48sp</dimen>
+    <dimen name="frag_prod_add_item_btn_height">56dp</dimen>
+    <dimen name="frag_shop_grid_column_width">200dp</dimen>
 
 </resources>
