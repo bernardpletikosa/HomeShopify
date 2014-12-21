@@ -18,23 +18,22 @@ import bp.jellena.shopify.data.db.ProductState;
 public class ProductListAdapter extends ArrayAdapter<Product> {
 
     private final int mColor;
-    private Context context;
-
-    private List<Product> data;
+    private Context mContext;
+    private List<Product> mProducts;
 
     public ProductListAdapter(Context context, List<Product> data, int color) {
         super(context, R.layout.products_list_row, data);
-        this.data = data;
-        this.context = context;
+        this.mProducts = data;
+        this.mContext = context;
         this.mColor = color;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
         convertView = inflater.inflate(R.layout.products_list_row, parent, false);
 
-        Product product = data.get(position);
+        Product product = mProducts.get(position);
 
         ((TextView) convertView.findViewById(R.id.item_row_name_TV)).setText(product.name);
 

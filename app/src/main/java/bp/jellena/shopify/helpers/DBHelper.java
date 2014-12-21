@@ -7,9 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-/**
- * Created by bp -- 02/10/14.
- */
 public class DBHelper {
 
     private static final String TAG = DBHelper.class.getSimpleName();

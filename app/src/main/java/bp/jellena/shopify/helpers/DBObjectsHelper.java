@@ -12,9 +12,6 @@ import bp.jellena.shopify.data.db.ProductState;
 import bp.jellena.shopify.events.ShopifyEvents;
 import de.greenrobot.event.EventBus;
 
-/**
- * Created by bp -- 02/10/14.
- */
 public class DBObjectsHelper {
 
     public static void createProduct(Context context, Product editingProduct, String name, long categoryId) {

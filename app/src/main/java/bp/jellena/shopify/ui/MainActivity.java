@@ -1,7 +1,6 @@
 package bp.jellena.shopify.ui;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -22,20 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.activeandroid.query.Select;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import bp.jellena.shopify.R;
 import bp.jellena.shopify.data.Fragments;
-import bp.jellena.shopify.data.ShopifyConstants;
+import bp.jellena.shopify.data.ShopifyCons;
 import bp.jellena.shopify.data.db.Category;
-import bp.jellena.shopify.data.db.Product;
 import bp.jellena.shopify.data.model.NavigationDrawerItem;
 import bp.jellena.shopify.events.ShopifyEvents;
 import bp.jellena.shopify.helpers.DBObjectsHelper;
@@ -50,56 +42,24 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import de.greenrobot.event.EventBus;
 
-/**
- * Created by Michal Bialas on 19/07/14.
- *
- * @author Michal Bialas
- */
 public class MainActivity extends ActionBarActivity {
 
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    private static final String STATE_NEW_CATEGORY = "adding_new_category";
-    private static final String STATE_NEW_CATEGORY_COLOR = "adding_new_category_color";
-    private static final String STATE_CURRENT_CATEGORY_SHOWING = "current_category_showing";
-
-    private static final String STATE_FRAG_SETTINGS = "state_frag_sett";
-    private static final String STATE_FRAG_SHOP = "state_frag_shop";
-
-    private static List<Integer> data = Arrays.asList(R.color.blue_light, R.color.purple_light,
-            R.color.green_light, R.color.orange_light, R.color.red_light, R.color.blue_dark,
-            R.color.purple_dark, R.color.green_dark, R.color.orange_dark, R.color.red_dark,
-            R.color.material_purple, R.color.material_pink, R.color.material_blue);
-    private int currentSelectedPosition = 0;
-
-    @InjectView(R.id.navigationDrawerListViewWrapper)
-    NavigationDrawerView mNavigationDrawerListViewWrapper;
-
-    @InjectView(R.id.linearDrawer)
-    LinearLayout mLinearDrawerLayout;
-
-    @InjectView(R.id.drawerLayout)
-    DrawerLayout mDrawerLayout;
-
-    @InjectView(R.id.leftDrawerListView)
-    ListView leftDrawerListView;
-
-    @InjectView((R.id.new_item_layout))
-    LinearLayout newItemLayout;
-
-    @InjectView(R.id.new_category_color_layout)
-    LinearLayout newCategoryColorLayout;
-
-    @InjectView(R.id.new_item_name)
-    EditText newItemNameET;
+    @InjectView(R.id.navigationDrawerListViewWrapper) NavigationDrawerView mNavDrawer;
+    @InjectView(R.id.linearDrawer) LinearLayout mLinearDrawerLayout;
+    @InjectView(R.id.drawerLayout) DrawerLayout mDrawerLayout;
+    @InjectView(R.id.leftDrawerListView) ListView mDrawerListView;
+    @InjectView((R.id.new_item_layout)) LinearLayout mNewItemLayout;
+    @InjectView(R.id.new_category_color_layout) LinearLayout mNewCategoryColorLayout;
+    @InjectView(R.id.new_item_name) EditText mNewItemName;
 
     private ActionBarDrawerToggle mDrawerToggle;
+    private List<NavigationDrawerItem> mNavItems;
 
-    private List<NavigationDrawerItem> navigationItems;
-
-    private boolean addingItem = false;
-    private int newItemSelectedColor = -1;
-    private long currentCategoryIdShowing;
-    private Category editingCategory;
+    private boolean mAddingItem = false;
+    private int mItemSelectedColor = -1;
+    private long mCurrentCatIdShowing;
+    private int mCurrentSelected = 0;
+    private Category mEditingCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,16 +72,16 @@ public class MainActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.contentFrame,
                     Fragment.instantiate(MainActivity.this, Fragments.HOME.getFragment())).commit();
         } else {
-            currentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mCurrentSelected = savedInstanceState.getInt(ShopifyCons.STATE_SELECTED_POSITION);
         }
 
-        navigationItems = new ArrayList<>();
-        navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_home), true));
-        navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_shop), true));
-        navigationItems.add(new NavigationDrawerItem(getString(R.string.fragment_settings),
+        mNavItems = new ArrayList<>();
+        mNavItems.add(new NavigationDrawerItem(getString(R.string.fragment_home), true));
+        mNavItems.add(new NavigationDrawerItem(getString(R.string.fragment_shop), true));
+        mNavItems.add(new NavigationDrawerItem(getString(R.string.fragment_settings),
                 R.drawable.ic_action_settings, false));
 
-        mNavigationDrawerListViewWrapper.replaceWith(navigationItems);
+        mNavDrawer.replaceWith(mNavItems);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_navigation_drawer, R.string.navigation_drawer_open,
@@ -142,16 +102,16 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        for (final Integer color : data) {
+        for (final Integer color : ShopifyCons.colors) {
             View view = getLayoutInflater().inflate(R.layout.category_color_view, null, false);
             ((GradientDrawable) view.getBackground()).setColor(getResources().getColor(color));
-            newCategoryColorLayout.addView(view);
+            mNewCategoryColorLayout.addView(view);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    newItemSelectedColor = color;
-                    newItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(color));
+                    mItemSelectedColor = color;
+                    mNewItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(color));
                 }
             });
         }
@@ -161,7 +121,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        editingCategory = null;
+        mEditingCategory = null;
     }
 
     @Override
@@ -173,16 +133,16 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, currentSelectedPosition);
+        outState.putInt(ShopifyCons.STATE_SELECTED_POSITION, mCurrentSelected);
 
-        outState.putBoolean(STATE_NEW_CATEGORY, addingItem);
+        outState.putBoolean(ShopifyCons.STATE_NEW_CATEGORY, mAddingItem);
 
-        outState.putInt(STATE_NEW_CATEGORY_COLOR, newItemSelectedColor);
+        outState.putInt(ShopifyCons.STATE_NEW_CATEGORY_COLOR, mItemSelectedColor);
 
-        outState.putLong(STATE_CURRENT_CATEGORY_SHOWING, currentCategoryIdShowing);
+        outState.putLong(ShopifyCons.STATE_CURRENT_CATEGORY_SHOWING, mCurrentCatIdShowing);
 
-        outState.putBoolean(STATE_FRAG_SHOP, getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop);
-        outState.putBoolean(STATE_FRAG_SETTINGS, getSupportFragmentManager().getFragments().get(0) instanceof FragmentSettings);
+        outState.putBoolean(ShopifyCons.STATE_FRAG_SHOP, getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop);
+        outState.putBoolean(ShopifyCons.STATE_FRAG_SETTINGS, getSupportFragmentManager().getFragments().get(0) instanceof FragmentSettings);
     }
 
     @Override
@@ -193,22 +153,22 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null)
             return;
 
-        if (savedInstanceState.getBoolean(STATE_FRAG_SHOP)) {
+        if (savedInstanceState.getBoolean(ShopifyCons.STATE_FRAG_SHOP)) {
             initShopFrag();
             return;
         }
-        if (savedInstanceState.getBoolean(STATE_FRAG_SETTINGS)) {
+        if (savedInstanceState.getBoolean(ShopifyCons.STATE_FRAG_SETTINGS)) {
             initSettingsFrag();
             return;
         }
 
         initHome();
 
-        addingItem = savedInstanceState.getBoolean(STATE_NEW_CATEGORY);
+        mAddingItem = savedInstanceState.getBoolean(ShopifyCons.STATE_NEW_CATEGORY);
         toogleNewItemLayout();
 
-        currentCategoryIdShowing = savedInstanceState.getLong(STATE_CURRENT_CATEGORY_SHOWING);
-        if (currentCategoryIdShowing > 0) {
+        mCurrentCatIdShowing = savedInstanceState.getLong(ShopifyCons.STATE_CURRENT_CATEGORY_SHOWING);
+        if (mCurrentCatIdShowing > 0) {
             initCategory();
         } else {
             if (findViewById(R.id.detailsFrame) != null) {
@@ -216,9 +176,9 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
-        newItemSelectedColor = savedInstanceState.getInt(STATE_NEW_CATEGORY_COLOR);
-        if (newItemSelectedColor > 0)
-            newItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(newItemSelectedColor));
+        mItemSelectedColor = savedInstanceState.getInt(ShopifyCons.STATE_NEW_CATEGORY_COLOR);
+        if (mItemSelectedColor > 0)
+            mNewItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(mItemSelectedColor));
     }
 
     @Override
@@ -241,7 +201,7 @@ public class MainActivity extends ActionBarActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_action_add:
-                addingItem = newItemLayout.getVisibility() != View.VISIBLE;
+                mAddingItem = mNewItemLayout.getVisibility() != View.VISIBLE;
                 toogleNewItemLayout();
                 return true;
             case R.id.menu_action_refresh:
@@ -254,29 +214,34 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.new_item_add_btn)
     public void addItem() {
-        if (newItemNameET.getText().toString() == null || newItemNameET.getText().toString().isEmpty()) {
-            newItemNameET.setError("You must put some text here :)");
+        if (mNewItemName.getText().toString() == null || mNewItemName.getText().toString().isEmpty()) {
+            mNewItemName.setError("You must put some text here :)");
             return;
         }
 
-        if ((getSupportFragmentManager().getFragments().get(0) instanceof FragmentHome) && newItemSelectedColor < 0) {
+        if ((getSupportFragmentManager().getFragments().get(0) instanceof FragmentHome) && mItemSelectedColor < 0) {
             Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake);
-            newCategoryColorLayout.startAnimation(shake);
+            mNewCategoryColorLayout.startAnimation(shake);
             return;
         }
 
-        if (getSupportFragmentManager().getFragments().get(0) instanceof FragmentHome)
-            DBObjectsHelper.createCategory(getApplicationContext(), editingCategory, newItemNameET.getText().toString(), newItemSelectedColor);
+        if (getSupportFragmentManager().getFragments().get(0) instanceof FragmentHome) {
+            DBObjectsHelper.createCategory(getApplicationContext(), mEditingCategory, mNewItemName.getText().toString(), mItemSelectedColor);
+            mEditingCategory = null;
+        }
 
-        newItemSelectedColor = -1;
-        newItemNameET.setText("");
-        newItemLayout.getChildAt(0).setBackgroundResource(R.color.purple_dark);
+        mItemSelectedColor = -1;
+        mNewItemName.setText("");
+        mNewItemLayout.getChildAt(0).setBackgroundResource(R.color.main_color);
     }
 
     @OnClick(R.id.new_item_delete_btn)
     public void removeItem() {
-        if (DBObjectsHelper.removeItem(editingCategory))
-            Toast.makeText(this, "Category " + editingCategory.name + " deleted.", Toast.LENGTH_SHORT).show();
+        if (DBObjectsHelper.removeItem(mEditingCategory)) {
+            Toast.makeText(this, "Category " + mEditingCategory.name + " deleted.",
+                    Toast.LENGTH_SHORT).show();
+            mEditingCategory = null;
+        }
     }
 
     @OnItemClick(R.id.leftDrawerListView)
@@ -290,46 +255,46 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onEvent(ShopifyEvents.EditCategoryEvent ece) {
-        this.editingCategory = ece.getCategory();
+        this.mEditingCategory = ece.getCategory();
 
-        addingItem = true;
-        newItemSelectedColor = ece.getCategory().color;
-        if (newItemSelectedColor > 0)
-            newItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(newItemSelectedColor));
+        mAddingItem = true;
+        mItemSelectedColor = ece.getCategory().color;
+        if (mItemSelectedColor > 0)
+            mNewItemLayout.getChildAt(0).setBackgroundColor(getResources().getColor(mItemSelectedColor));
 
-        newItemNameET.setText(ece.getCategory().name);
+        mNewItemName.setText(ece.getCategory().name);
 
-        newItemLayout.setVisibility(addingItem ? View.VISIBLE : View.GONE);
+        mNewItemLayout.setVisibility(mAddingItem ? View.VISIBLE : View.GONE);
     }
 
     public void onEvent(ShopifyEvents.CurrentCategory cc) {
-        this.currentCategoryIdShowing = cc.getCurrentCatategory().getId();
+        this.mCurrentCatIdShowing = cc.getCurrentCatategory().getId();
         reinitiateAddLayout();
 
         getSupportActionBar().setTitle(cc.getCurrentCatategory().name);
-        newItemLayout.getChildAt(0).setBackgroundResource(R.color.purple_dark);
+        mNewItemLayout.getChildAt(0).setBackgroundResource(R.color.main_color);
     }
 
     private void toogleNewItemLayout() {
-        if (addingItem) {
-            newItemNameET.requestFocus();
+        if (mAddingItem) {
+            mNewItemName.requestFocus();
         } else {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(newItemNameET.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mNewItemName.getWindowToken(), 0);
         }
 
-        newItemLayout.setVisibility(addingItem ? View.VISIBLE : View.GONE);
+        mNewItemLayout.setVisibility(mAddingItem ? View.VISIBLE : View.GONE);
     }
 
     private void selectItem(int position) {
-        if (leftDrawerListView != null) {
-            leftDrawerListView.setItemChecked(position, true);
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(position, true);
 
-            navigationItems.get(currentSelectedPosition).setSelected(false);
-            navigationItems.get(position).setSelected(true);
+            mNavItems.get(mCurrentSelected).setSelected(false);
+            mNavItems.get(position).setSelected(true);
 
-            currentSelectedPosition = position;
-            getSupportActionBar().setTitle(navigationItems.get(currentSelectedPosition).getItemName());
+            mCurrentSelected = position;
+            getSupportActionBar().setTitle(mNavItems.get(mCurrentSelected).getItemName());
         }
 
         if (mLinearDrawerLayout != null)
@@ -368,6 +333,7 @@ public class MainActivity extends ActionBarActivity {
             shopFrag = Fragment.instantiate(MainActivity.this, Fragments.SHOP.getFragment());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame, shopFrag).commit();
+        selectItem(1);
     }
 
     private void initSettingsFrag() {
@@ -376,9 +342,10 @@ public class MainActivity extends ActionBarActivity {
             settFrag = Fragment.instantiate(MainActivity.this, Fragments.SETTINGS.getFragment());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame, settFrag).commit();
+        selectItem(2);
     }
 
-    private boolean doubleBackToExitPressedOnce = false;
+    private boolean backPressed = false;
 
     @Override
     public void onBackPressed() {
@@ -386,23 +353,23 @@ public class MainActivity extends ActionBarActivity {
                 getSupportFragmentManager().getFragments().get(0) instanceof FragmentShop ||
                 getSupportFragmentManager().getFragments().get(0) instanceof FragmentSettings) {
 
-            currentCategoryIdShowing = -1;
+            mCurrentCatIdShowing = -1;
             initHome();
-        } else if (addingItem) {
+        } else if (mAddingItem) {
             reinitiateAddLayout();
         } else {
-            if (doubleBackToExitPressedOnce) {
+            if (backPressed) {
                 super.onBackPressed();
                 return;
             }
 
-            this.doubleBackToExitPressedOnce = true;
+            this.backPressed = true;
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce = false;
+                    backPressed = false;
                 }
             }, 2000);
         }
@@ -410,7 +377,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void initCategory() {
         Bundle bundle = new Bundle();
-        bundle.putLong(ShopifyConstants.PRODUCTS_BUNDLE_CATEGORY_ID, currentCategoryIdShowing);
+        bundle.putLong(ShopifyCons.PROD_BUNDLE_CATEGORY_ID, mCurrentCatIdShowing);
 
         int containerId = R.id.contentFrame;
         if (findViewById(R.id.detailsFrame) != null)
@@ -430,13 +397,13 @@ public class MainActivity extends ActionBarActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame, homeFrag).commit();
 
-        selectItem(currentSelectedPosition);
+        selectItem(0);
     }
 
     private void reinitiateAddLayout() {
-        editingCategory = null;
-        addingItem = false;
-        newItemSelectedColor = -1;
+        mEditingCategory = null;
+        mAddingItem = false;
+        mItemSelectedColor = -1;
 
         toogleNewItemLayout();
     }

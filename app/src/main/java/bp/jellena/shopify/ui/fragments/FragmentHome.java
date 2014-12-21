@@ -1,16 +1,15 @@
 package bp.jellena.shopify.ui.fragments;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -26,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import bp.jellena.shopify.R;
 import bp.jellena.shopify.data.Fragments;
-import bp.jellena.shopify.data.ShopifyConstants;
+import bp.jellena.shopify.data.ShopifyCons;
 import bp.jellena.shopify.data.db.Category;
 import bp.jellena.shopify.events.ShopifyEvents;
 import bp.jellena.shopify.ui.adapters.CategoryGridAdapter;
@@ -34,21 +33,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
-/**
- * Created by bp on 01/10/14
- *
- * @author bp
- */
 public class FragmentHome extends Fragment {
 
-    @InjectView(R.id.frag_home_category_grid)
-    GridView categoryGrid;
+    @InjectView(R.id.frag_home_category_grid) GridView mCategoryGrid;
+    @InjectView(R.id.frag_home_tutorial) View mTutorialLayout;
 
-    @InjectView(R.id.frag_home_tutorial)
-    View tutorialLayout;
-
-    private List<Category> categories = new ArrayList<>();
-    private CategoryGridAdapter customGridAdapter;
+    private List<Category> mCategories = new ArrayList<>();
+    private CategoryGridAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +47,7 @@ public class FragmentHome extends Fragment {
 
         setHasOptionsMenu(true);
 
-        customGridAdapter = new CategoryGridAdapter(getActivity(), categories);
+        mAdapter = new CategoryGridAdapter(getActivity(), mCategories);
     }
 
     @Override
@@ -64,16 +55,16 @@ public class FragmentHome extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.inject(this, view);
 
-        categoryGrid.setAdapter(customGridAdapter);
-        categoryGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mCategoryGrid.setAdapter(mAdapter);
+        mCategoryGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!(getActivity().getSupportFragmentManager().getFragments().get(0) instanceof FragmentProducts)) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong(ShopifyConstants.PRODUCTS_BUNDLE_CATEGORY_ID, categories.get(position).getId());
+                    bundle.putLong(ShopifyCons.PROD_BUNDLE_CATEGORY_ID, mCategories.get(position).getId());
 
                     int containerId = R.id.contentFrame;
-                    if(getActivity().findViewById(R.id.detailsFrame) != null)
+                    if (getActivity().findViewById(R.id.detailsFrame) != null)
                         containerId = R.id.detailsFrame;
 
                     getActivity().getSupportFragmentManager().beginTransaction()
@@ -81,15 +72,15 @@ public class FragmentHome extends Fragment {
                                     .instantiate(getActivity(), Fragments.PRODUCTS.getFragment(), bundle))
                             .commit();
 
-                    EventBus.getDefault().post(new ShopifyEvents.CurrentCategory(categories.get(position)));
+                    EventBus.getDefault().post(new ShopifyEvents.CurrentCategory(mCategories.get(position)));
                 }
             }
         });
 
-        categoryGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mCategoryGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                EventBus.getDefault().post(new ShopifyEvents.EditCategoryEvent(categories.get(position)));
+                EventBus.getDefault().post(new ShopifyEvents.EditCategoryEvent(mCategories.get(position)));
                 return true;
             }
         });
@@ -97,6 +88,14 @@ public class FragmentHome extends Fragment {
         showTutorial();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main_color)));
     }
 
     @Override
@@ -129,11 +128,11 @@ public class FragmentHome extends Fragment {
     }
 
     private void refreshCategoryList() {
-        categories.clear();
+        mCategories.clear();
         List<Category> refreshedCategories = new Select().from(Category.class).execute();
-        categories.addAll(refreshedCategories);
+        mCategories.addAll(refreshedCategories);
 
-        Collections.sort(categories, new Comparator<Category>() {
+        Collections.sort(mCategories, new Comparator<Category>() {
             @Override
             public int compare(Category lhs, Category rhs) {
                 return lhs.name.compareTo(rhs.name);
@@ -143,16 +142,16 @@ public class FragmentHome extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                customGridAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
 
     private void showTutorial() {
-        if (ShopifyConstants.getSharedPrefs(getActivity()).getBoolean(ShopifyConstants.TUTORIAL_HOME_FIRST_USE, true)) {
-            ShopifyConstants.getSharedPrefs(getActivity()).edit().putBoolean(ShopifyConstants.TUTORIAL_HOME_FIRST_USE, false).apply();
+        if (ShopifyCons.sp.getBoolean(ShopifyCons.TUT_HOME_FIRST_USE, true)) {
+            ShopifyCons.sp.edit().putBoolean(ShopifyCons.TUT_HOME_FIRST_USE, false).apply();
 
-            tutorialLayout.setVisibility(View.VISIBLE);
+            mTutorialLayout.setVisibility(View.VISIBLE);
 
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
             executor.schedule(new Runnable() {
@@ -161,7 +160,7 @@ public class FragmentHome extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tutorialLayout.setVisibility(View.GONE);
+                            mTutorialLayout.setVisibility(View.GONE);
                         }
                     });
                 }

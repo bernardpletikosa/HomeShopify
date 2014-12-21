@@ -11,6 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_padding"
         android:orientation="horizontal">
 
         <TextView
@@ -23,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/default_small_padding"
-            android:textColor="@color/gray"
+            android:textColor="@color/grey_900"
             android:textSize="@dimen/frag_prod_item_name_text_size" />
 
         <ImageView

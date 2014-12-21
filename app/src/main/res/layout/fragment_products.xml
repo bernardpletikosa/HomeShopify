@@ -63,7 +63,7 @@
             android:gravity="center"
             android:padding="@dimen/default_small_padding"
             android:text="@string/tutorial_products_title"
-            android:textColor="@color/purple_dark"
+            android:textColor="@color/main_color"
             android:textSize="@dimen/tutorial_title_size" />
 
         <TextView
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:padding="@dimen/default_small_padding"
             android:text="@string/tutorial_products_text"
-            android:textColor="@color/purple_light"
+            android:textColor="@color/main_color"
             android:textSize="@dimen/tutorial_text_size" />
     </LinearLayout>
 

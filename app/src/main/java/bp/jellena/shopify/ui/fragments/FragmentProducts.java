@@ -1,8 +1,11 @@
 package bp.jellena.shopify.ui.fragments;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +25,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import bp.jellena.shopify.R;
-import bp.jellena.shopify.data.ShopifyConstants;
+import bp.jellena.shopify.data.ShopifyCons;
 import bp.jellena.shopify.data.db.Category;
 import bp.jellena.shopify.data.db.Product;
 import bp.jellena.shopify.events.ShopifyEvents;
@@ -44,21 +47,20 @@ public class FragmentProducts extends Fragment {
     private long mCategoryId;
     private int mColor;
     private List<Product> mProducts = new ArrayList<>();
-    private ProductListAdapter itemsListAdapter;
-    private Product editingProduct;
-    private ProductAddView.AddProductListener productListener;
+    private ProductListAdapter mAdapter;
+    private Product mEditingProduct;
+    private ProductAddView.AddProductListener mProductListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCategoryId = getArguments().getLong(ShopifyConstants.PRODUCTS_BUNDLE_CATEGORY_ID, 0);
+        mCategoryId = getArguments().getLong(ShopifyCons.PROD_BUNDLE_CATEGORY_ID, 0);
 
-        Category cat = new Select().from(Category.class).where("Id = ?",
-                mCategoryId).executeSingle();
+        Category cat = new Select().from(Category.class).where("Id = ?", mCategoryId).executeSingle();
         mColor = cat.color;
 
-        itemsListAdapter = new ProductListAdapter(getActivity(), mProducts, mColor);
+        mAdapter = new ProductListAdapter(getActivity(), mProducts, mColor);
 
         setRetainInstance(true);
     }
@@ -73,7 +75,7 @@ public class FragmentProducts extends Fragment {
         showProductsTutorial();
 
         SwingLeftInAnimationAdapter animAdapter = new
-                SwingLeftInAnimationAdapter(itemsListAdapter);
+                SwingLeftInAnimationAdapter(mAdapter);
         animAdapter.setAbsListView(itemsListView);
 
         itemsListView.setAdapter(animAdapter);
@@ -85,17 +87,17 @@ public class FragmentProducts extends Fragment {
                 Product product = mProducts.get(position);
                 product.state = ++product.state % 3;
                 product.save();
-                itemsListAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         });
 
         itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                editingProduct = mProducts.get(position);
+                mEditingProduct = mProducts.get(position);
 
                 addNewProdBtn.setVisibility(View.GONE);
-                addItemView.initView(getProductListener(), editingProduct.name, mColor);
+                addItemView.initView(getProductListener(), mEditingProduct.name, mColor);
                 scheduleAddProductRefresh(10);
 
                 return true;
@@ -105,6 +107,14 @@ public class FragmentProducts extends Fragment {
         refreshProducts();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setBackgroundDrawable(new ColorDrawable(getResources().getColor(mColor)));
     }
 
     @OnClick(R.id.frag_prod_add_prod_btn)
@@ -166,7 +176,7 @@ public class FragmentProducts extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    itemsListAdapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -198,18 +208,18 @@ public class FragmentProducts extends Fragment {
     }
 
     private ProductAddView.AddProductListener getProductListener() {
-        if (productListener == null)
-            productListener = new ProductAddView.AddProductListener() {
+        if (mProductListener == null)
+            mProductListener = new ProductAddView.AddProductListener() {
                 @Override
                 public void onAddEvent(String name) {
-                    DBObjectsHelper.createProduct(getActivity(), editingProduct, name, mCategoryId);
+                    DBObjectsHelper.createProduct(getActivity(), mEditingProduct, name, mCategoryId);
                     scheduleAddProductRefresh(10);
                 }
 
                 @Override
                 public void onDeleteEvent() {
-                    DBObjectsHelper.removeItem(editingProduct);
-                    Toast.makeText(getActivity(), "Product " + editingProduct.name + " deleted.", Toast.LENGTH_LONG).show();
+                    DBObjectsHelper.removeItem(mEditingProduct);
+                    Toast.makeText(getActivity(), "Product " + mEditingProduct.name + " deleted.", Toast.LENGTH_LONG).show();
                     scheduleAddProductRefresh(1);
                 }
 
@@ -219,12 +229,12 @@ public class FragmentProducts extends Fragment {
                 }
             };
 
-        return productListener;
+        return mProductListener;
     }
 
     private void showProductsTutorial() {
-        if (ShopifyConstants.getSharedPrefs(getActivity()).getBoolean(ShopifyConstants.TUTORIAL_PRODUCTS_FIRST_USE, true)) {
-            ShopifyConstants.getSharedPrefs(getActivity()).edit().putBoolean(ShopifyConstants.TUTORIAL_PRODUCTS_FIRST_USE, false).apply();
+        if (ShopifyCons.sp.getBoolean(ShopifyCons.TUT_PRODUCTS_FIRST_USE, true)) {
+            ShopifyCons.sp.edit().putBoolean(ShopifyCons.TUT_PRODUCTS_FIRST_USE, false).apply();
 
             tutorialLayout.setVisibility(View.VISIBLE);
 

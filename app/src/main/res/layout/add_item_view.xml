@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_new_item_layout_height"
         android:layout_gravity="center"
-        android:background="@color/purple_dark"
+        android:background="@color/main_color"
         android:gravity="center"
         android:orientation="horizontal">
 

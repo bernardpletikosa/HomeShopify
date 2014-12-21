@@ -5,7 +5,7 @@
     <dimen name="default_small_padding">4dp</dimen>
 
     <!-- Navigation Drawer -->
-    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="navigation_drawer_width">200dp</dimen>
     <dimen name="navigation_drawer_image_view_size">32dp</dimen>
     <dimen name="navigation_drawer_personal_data_layout_height">80dp</dimen>
 
@@ -25,7 +25,7 @@
     <dimen name="app_new_item_layout_height">90dp</dimen>
     <dimen name="app_new_item_color_picker_circle_size">40dp</dimen>
     <dimen name="app_new_item_name_text_size">30sp</dimen>
-    <dimen name="app_drawer_main_item_text_size">25sp</dimen>
+    <dimen name="app_drawer_main_item_text_size">22sp</dimen>
     <dimen name="app_drawer_item_text_size">20sp</dimen>
 
     <!--Home fragment-->
@@ -40,9 +40,9 @@
     <dimen name="frag_prod_item_name_text_size">20sp</dimen>
 
     <!--Tutorial-->
-    <dimen name="tutorial_text_size">30sp</dimen>
-    <dimen name="tutorial_title_size">40sp</dimen>
+    <dimen name="tutorial_text_size">25sp</dimen>
+    <dimen name="tutorial_title_size">30sp</dimen>
     <dimen name="frag_prod_add_item_btn_height">56dp</dimen>
-    <dimen name="frag_shop_grid_column_width">250dp</dimen>
+    <dimen name="frag_shop_grid_column_width">200dp</dimen>
 
 </resources>

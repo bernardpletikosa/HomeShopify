@@ -2,8 +2,11 @@ package bp.jellena.shopify.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +23,6 @@ import bp.jellena.shopify.helpers.DBHelper;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by bp 02/10/14.
- */
 public class FragmentSettings extends Fragment {
 
     @Override
@@ -30,6 +30,14 @@ public class FragmentSettings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.inject(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main_color)));
     }
 
     @Override

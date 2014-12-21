@@ -3,14 +3,12 @@ package bp.jellena.shopify.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.activeandroid.Model;
 import com.activeandroid.query.Select;
 
 import java.util.HashMap;
@@ -24,28 +22,27 @@ import bp.jellena.shopify.data.db.ProductState;
 
 public class ShopListAdapter extends ArrayAdapter<Product> {
 
-    private Context context;
-
-    private List<Product> data;
-    private Map<Long, Integer> categoryColors = new HashMap<>();
+    private Context mContext;
+    private List<Product> mProducts;
+    private Map<Long, Integer> mCategoryColors = new HashMap<>();
 
     public ShopListAdapter(Context context, List<Product> data) {
         super(context, R.layout.products_list_row, data);
-        this.data = data;
-        this.context = context;
+        this.mProducts = data;
+        this.mContext = context;
 
         List<Category> categories = new Select().from(Category.class).execute();
         for (Category category : categories) {
-            categoryColors.put(category.getId(), category.color);
+            mCategoryColors.put(category.getId(), category.color);
         }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
         convertView = inflater.inflate(R.layout.products_list_row, parent, false);
 
-        Product product = data.get(position);
+        Product product = mProducts.get(position);
 
         ((TextView) convertView.findViewById(R.id.item_row_name_TV)).setText(product.name);
 
@@ -63,7 +60,7 @@ public class ShopListAdapter extends ArrayAdapter<Product> {
                 break;
         }
 
-        setColor(convertView, categoryColors.get(product.categoryId));
+        setColor(convertView, mCategoryColors.get(product.categoryId));
 
         return convertView;
     }

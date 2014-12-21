@@ -1,16 +1,11 @@
 package bp.jellena.shopify.ui.views;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,7 +14,7 @@ import bp.jellena.shopify.R;
 
 public class ProductAddView extends LinearLayout {
 
-    private Context context;
+    private Context mContext;
 
     public interface AddProductListener {
         public void onAddEvent(String name);
@@ -36,7 +31,7 @@ public class ProductAddView extends LinearLayout {
 
     public ProductAddView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
+        this.mContext = context;
         LayoutInflater.from(context).inflate(R.layout.add_item_custom_view, this);
     }
 
@@ -95,7 +90,7 @@ public class ProductAddView extends LinearLayout {
     public void setViewVisibility(boolean isVisible) {
         EditText nameET = (EditText) findViewById(R.id.add_item_name);
 
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if (isVisible) {
             setVisibility(VISIBLE);
